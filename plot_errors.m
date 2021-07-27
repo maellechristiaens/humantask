@@ -39,8 +39,6 @@ errors(5) = errors(5)/nb_trials(6);
 
 err_cond = err_cond/(20*(length(change)/4)); %a changer
 
-names = {'No touch in fixation'; 'No touch during trial'; 'Wrong touch during learning'; 'Wrong touch during test1'; 'Wrong touch during test2'};
-
 fig = figure('Position', [20 40 1200 600]); %create the figure box
 t = tiledlayout(2, 2); %create the layout for several plots
 title(t, 'Repartition of the errors during the task')
@@ -71,23 +69,26 @@ b.CData(5,:) = [0.4940 0.1840 0.5560];
 yl = yline(2/3, '--', 'chance level', 'LineWidth', 2); %add a horizontal line representing the chance level
 yl.LabelHorizontalAlignment = 'left';
 
+names = {'No touch in fixation'; 'No touch during trial'; 'Wrong touch during learning'; 'Wrong touch during test1'; 'Wrong touch during test2'};
+%names of the different bars in the barplot
+
 axis([ax1], [0 6 0 1]) %set the limits of the axis
-set(gca, 'xticklabel', names) %
+set(gca, 'xticklabel', names) %change the names of the bars
 title('Proportion of errors in each phase')
 
-ax2 = nexttile;
+ax2 = nexttile; %next plot
 b2 = bar(err_cond);
 b2.FaceColor = 'flat';
 n = {}; %initialisation of the names of the bars in the barplot
 for i = 1:m %for each condition
-    b2.CData(i,:) = [0 0.4470 0.7410];
+    b2.CData(i,:) = [0 0.4470 0.7410]; %change the color of the bar depending if it's a test1 phase or a test2 phase
     b2.CData(m + i,:) = [0.4940 0.1840 0.5560];
-    n{end + 1} = strcat('Condition ', num2str(i));
+    n{end + 1} = strcat('Condition ', num2str(i)); %add the condition number to the names of the bars
 end
-yl = yline(2/3, '--', 'chance level', 'LineWidth', 2);
+yl = yline(2/3, '--', 'chance level', 'LineWidth', 2); %add an horizontal line marking the chance level
 yl.LabelHorizontalAlignment = 'left';
 
-n = [n,n];
-axis([ax2], [0 7 0 1])
-set(gca, 'xticklabel', n)
+n = [n,n]; %concatenate the names of the bars twice (because there are 2 test phases)
+axis([ax2], [0 7 0 1]) %change the limits of the axis
+set(gca, 'xticklabel', n) %change the names of the bars
 title('Proportion of errors depending on the condition number')
