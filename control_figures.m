@@ -1,18 +1,18 @@
 function[] = control_figures(name_file)
 addpath 'C:\Users\maell\Documents\ENS\Cours\Césure\Stage_Sliwa\MonkeyLogic'
-addpath 'C:\Users\maell\Documents\ENS\Cours\Césure\Stage_Sliwa\MonkeyLogic\human_task_mc'
-cd C:\Users\maell\Documents\ENS\Cours\Césure\Stage_Sliwa\MonkeyLogic\human_task_mc
+addpath 'C:\Users\maell\Documents\ENS\Cours\Césure\Stage_Sliwa\MonkeyLogic\human_task_mc' %add these paths to get all the functions needed
+cd C:\Users\maell\Documents\ENS\Cours\Césure\Stage_Sliwa\MonkeyLogic\human_task_mc %change directory
 s = regexp(name_file, '_');
 e = regexp(name_file, '.bhv2');
-name = name_file(s(end)+1:e-1); 
-mkdir(strcat('Figures_control\', name))
-copyfile(name_file, strcat('Figures_control\', name))
-cd(strcat('Figures_control\', name))
-stimuli = get_stimuli_presented(name_file, 1);
+name = name_file(s(end)+1:e-1); %find the subject's name
+mkdir(strcat('Figures_control\', name)) %create a new folder for this subject
+copyfile(name_file, strcat('Figures_control\', name)) %copy the bhv2 file in the new folder
+cd(strcat('Figures_control\', name)) %change directory to this new folder
+stimuli = get_stimuli_presented(name_file, 1); %calculate the cell array with all the informations needed
+%all the code below is to produce control figures using the different
+%scripts written
 where_touch = plot_touch(stimuli);
 saveas(where_touch, strcat('plot_touch_', name, '.png'))
-%time_trials = time_between_trials(stimuli);
-%saveas(time_trials, strcat('time_between_trials_', name, '.png'))
 touches_global = proportion_touch_global(stimuli);
 saveas(touches_global, strcat('proportions_of_touch_global_', name, '.png'))
 touches_test = proportion_touch(stimuli);
@@ -28,8 +28,8 @@ saveas(repartition_errors, strcat('errors_', name, '.png'))
 whisker_times = time_responses(stimuli);
 saveas(whisker_times, strcat('whisker_plot_time_response_', name, '.png'))
 comparison_color = mean_color_picture(stimuli);
-cd(strcat('Figures_control\', name))
+cd(strcat('Figures_control\', name)) %go back to the new folder, as the comparison_color script changes directory
 saveas(comparison_color, strcat('comparison_mean_colors_in_pictures_', name, '.png'))
 
-
+%go back to the main folder
 cd C:\Users\maell\Documents\ENS\Cours\Césure\Stage_Sliwa\MonkeyLogic\human_task_mc
