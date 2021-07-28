@@ -1,6 +1,6 @@
 function [C,timingfile,userdefined_trialholder] = task_human(MLConfig,TrialRecord)
 C = [];
-timingfile = {'step1_1_human.m','step1_2_human.m','step2_human.m','step3_human.m', 'step4_human.m', 'step5_human.m', 'step6_human.m', 'step7_human.m'}; %the scripts for the different TrialRecord.User.steps
+timingfile = {'step1_1_human.m','step1_2_human.m','step2_human.m','step3_human.m', 'step4_human.m', 'step5_human.m', 'step6_human.m', 'step7_human.m', 'step_end_human.m'}; %the scripts for the different TrialRecord.User.steps
 userdefined_trialholder = '';
 
 persistent timing_filenames_retrieved
@@ -184,6 +184,7 @@ switch TrialRecord.User.step %switch to the different steps according to the num
     case 7
         if isempty(TrialRecord.User.pictures_left7) %if all test pictures have been presented
             if TrialRecord.User.condition == TrialRecord.User.nb_of_conditions
+                timingfile = 'step_end_human.m';
                 TrialRecord.Quit = true; %quit the session
             else
                 TrialRecord.User.condition = TrialRecord.User.condition + 1;
