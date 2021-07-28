@@ -7,7 +7,7 @@ persistent timing_filenames_retrieved
 if isempty(timing_filenames_retrieved) %Only if it is the first time the function is called
     TrialRecord.User.number_of_coins = 0; %initialisation of the number of coins the participant has
     TrialRecord.User.initialisation = 0; %initialisation of the number of presentation of the initialisation step (only triangle shown)
-    TrialRecord.User.nb_of_conditions = 2; %set the number of conditions to be runned
+    TrialRecord.User.nb_of_conditions = 3; %set the number of conditions to be runned
     TrialRecord.User.success_count = 0; %the total number of successful attempts
     TrialRecord.User.min_success = 5; %min of successfull trials to reach the next step
     TrialRecord.User.list_behaviors = {'ind_alone','ind_no_interaction','kinship_holding','kinship_grooming', 'kinship_observing','friendship_grooming', 'friendship_sitting_close', 'friendship_foraging','hierarchy_mounting','hierarchy_fighting','hierarchy_chasing'}; %all the behaviors shown

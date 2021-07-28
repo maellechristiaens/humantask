@@ -1,6 +1,6 @@
 function[fig] = proportion_touch(data, all_trials)
-positions=[0 0 0 0 0;0 0 0 0 0;0 0 0 0 0;0 0 0 0 0]; %initialisation of the positions where the right pictures were presented and where the subject clicked
-positions_normalised = [0 0 0 0 0; 0 0 0 0 0]; %initialisation of the positions normalised (touched/presented)
+positions=zeros(4,5); %initialisation of the positions where the right pictures were presented and where the subject clicked
+positions_normalised = zeros(2,5); %initialisation of the positions normalised (touched/presented)
 data = data(~any(cellfun('isempty', data(:,2)), 2), :); %only look at the trials where 3 pictures were presented
 if ~all_trials %if we only want to look at trials during the test phases
     data = data(find(cellfun('isempty',strfind(data(:,12), 'Learning'))),:); %get rid of the learning trials during the learning phases

@@ -14,4 +14,6 @@ for k = 3:length(d) %for all the folders except the . and .. folders (that's why
         cd .. %go back to the main folder
     end
 end
-save allfiles.mat all %save the concatenated cell array
+cd C:\Users\maell\Documents\ENS\Cours\Césure\Stage_Sliwa\MonkeyLogic\human_task_mc\Results
+save allfiles.mat all %save the concatenated cell array in the results folder
+cd ..

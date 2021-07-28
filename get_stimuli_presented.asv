@@ -92,16 +92,12 @@ cond = {'hold' ; 'groomkin' ; 'foragekin' ; 'friendsgroom' ; 'friendsclose' ; 'f
 
 for j=1:2:length(change)-2 %for all the changes of phase
     for k=1:length(cond)
-        if contains(stimuli{change(j),1},cond(k)) %look which kind of condition it is
-            stimuli(change(j):change(j+2)-1,13)=conditions(k); %store the kind of condition
+        if contains(stimuli{change(j),1},cond(k)) %look which kind of condition it
+            stimuli(change(j):change(j+2)-1,13)=conditions(k);
             break
         end
     end
 end
-
-stimuli{end,14} = stimuli{end-1,14};
-stimuli{end,13} = stimuli{end-1,13};
-%add the information in the last row as it is not done through the loops
         
 if saving
     save(strcat('stimuli_', name, '.mat'), 'stimuli')

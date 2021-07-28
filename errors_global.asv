@@ -1,4 +1,4 @@
-function[fig] = plot_errors(stimuli)
+function[fig] = errors_global(stimuli)
 
 change=[]; %to store the index where it changes from learning to test phase
 for i=1:length(stimuli)-1 %for all the trials
@@ -8,34 +8,48 @@ for i=1:length(stimuli)-1 %for all the trials
 end
 change(end+1) = length(stimuli); %add the last trial in the change indexes
 
-m = max(cellfun(@max, stimuli(:,14))); %store the number of conditions seen 
+cond = {'hold' ; 'groomkin' ; 'foragekin' ; 'friendsgroom' ; 'friendsclose' ; 'friendsforaging' ; 'mount' ; 'fight' ; 'chase'};
+%all the different names the pictures can have depending on the condition
 phases = [20 30 40 50 60 70]; %the number stored in the bhv2 file for each phase of the task
-  
+m = max(cellfun(@max, stimuli(:,13))); %store the max number of conditions seen 
+
 errors =zeros(1,6); %initialisation of the number of errors of each type
-err_time = zeros(1, length(stimuli)); %initialisation of the errors across trials, 4 possibilities : success (0), no touch during trial (1), wrong touch during learning (2), or wrong touch during test (3)
-err_cond = zeros(1, m*2); %initialisation of the number of errors for each condition (m is the number of cond, *2 because there are 2 test phases)
-nb_cond = zeros(1,m); %initialisation of the number of condition number
+err_cond = zeros(1, m*2); %initialisation of the number of errors for each condition number (m is the number of cond, *2 because there are 2 test phases)
+err_kind_cond = zeros(2, length(cond)); %initialisation of the number of errors for each kind of condition (*2 because there are 2 test phases))
+
 nb_trials = zeros(1,6); %initialisation of the total number of trials per type
+nb_cond = zeros(1,m); %initialisation of the number of condition number
+nb_kind_cond = zeros(1,length(cond)); %initialisation of the number of each condition
 
 for j = 1:2:length(change)-1 %for all the new condition
-    nb_cond(1, stimuli{change(j),14}) = nb_cond(1, stimuli{change(j),14}) + 1; %store the condition number
+    nb_cond(1, stimuli{change(j),13}) = nb_cond(1, stimuli{change(j),13}) + 1; %store the condition number
+    if stimuli{change(j),9} == 40 %if it's during generalisation 1 (because the pictures shown during generalisation 2 are pictures of the other behaviors of the same category, but not the behavior in itself)
+        for k=1:length(cond) %find which kind of condition it was
+            if contains(stimuli{change(j),1}, cond(k))
+                nb_kind_cond(1,k) = nb_kind_cond(1,k) + 1; %and store the number of presentation of each kind of condition
+            end
+        end
+    end
 end
 
 for i=1:length(stimuli) %for each trial
     nb_trials(find(stimuli{i,9}==phases)) = nb_trials(find(stimuli{i,9}==phases)) + 1; %store which kind of trial it was
     errors(1, stimuli{i,11} + 1) = errors(1, stimuli{i,11} + 1) + 1; %store which kind of error it was 
-    if stimuli{i,11} == 4 %if it is a wrong touch during test1
-        err_time(1, i) = 3; 
-        err_cond(1, stimuli{i,14}) = err_cond(1, stimuli{i,14}) + 1; %add one to the count of test1 errors by condition (one of the first 3 elements of the matrix)
-    elseif stimuli{i,11} == 5 %if it is a wrong touch during test2
-        err_time(1, i) = 3;
-        err_cond(1, m + stimuli{i,14}) = err_cond(1, m + stimuli{i,14}) + 1; %add one to the count of test2 errors by condition (one of the last 3 elements of the matrix)
-    elseif stimuli{i,11} == 3 %if it is a wrong touch during a learning trial
-        err_time(1, i) = 2;
-    elseif stimuli{i,11} == 2 %if there was no touch during the trial 
-        err_time(1, i) = 1;
+    for k=1:length(cond) %find which kind of condition it was
+        if contains(stimuli{i,1}, cond(k))
+            if stimuli{i,11} == 4 %if it is a wrong touch during test1
+                err_cond(1, stimuli{i,13}) = err_cond(1, stimuli{i,13}) + 1; %add one to the count of test1 errors by condition (one of the first 3 elements of the matrix)
+                err_kind_cond(1,k) = err_kind_cond(1,k) + 1;
+            elseif stimuli{i,11} == 5 %if it is a wrong touch during test2
+                err_cond(1, m + stimuli{i,13}) = err_cond(1, m + stimuli{i,13}) + 1; %add one to the count of test2 errors by condition (one of the last 3 elements of the matrix)
+                err_kind_cond(2, k) = err_kind_cond(2,k) + 1;
+            end
+         end
     end
+    
+    
 end
+
 errors(1) = []; %erase the success trials
 nb_learning = nb_trials(1) + nb_trials(2) + nb_trials(4) + nb_trials(5); %the learning phase numbers are 20, 30, 50, 60, so the total number of learning trials is the sum of the numbers of these 4 phases
 errors(1) = errors(1)/sum(nb_trials); %transform from absolute numbers of errors to proportions by dividing by the total number of each phase
@@ -50,25 +64,23 @@ for i=1:length(nb_cond)
 end
 %divide the total number of errors by the number of each condition number
 
+for i=1:length(nb_kind_cond)
+    err_kind_cond(1,i) = err_kind_cond(1,i)/(20*nb_kind_cond(1,i));
+    err_kind_cond(2,i) = err_kind_cond(2,i)/(20*nb_kind_cond(1,i));
+end
+%divide the total number of errors by the number of each condition kind
 
 fig = figure('Position', [20 40 1200 600]); %create the figure box
 t = tiledlayout(2, 2); %create the layout for several plots
-title(t, 'Repartition of the errors during the task')
 ax = nexttile([1 2]); %first plot
-plot([1:length(stimuli)], err_time, '*', 'Color', [0 0 0]) %plot the kind of error across time with black stars
-yticks([0 1 2 3])
-yticklabels({'Success'; 'No touch during trial'; 'Wrong touch during learning'; 'Wrong touch during test'}); %change the names of the y ticks
-hold on %add rectangles of different colors to know where test phases started and ended
-for i=1:2:length(change)
-    if isequal(stimuli{change(i),12}, 'Test1')
-        rectangle('Position', [change(i) 0 change(i+1)-change(i) 4], 'FaceColor', [0 0.4470 0.7410 0.3], 'EdgeColor', [0 0.4470 0.7410 0.3])
-    else 
-        rectangle('Position', [change(i) 0 change(i+1)-change(i) 4], 'FaceColor', [0.4940 0.1840 0.5560 0.3], 'EdgeColor', [0.4940 0.1840 0.5560 0.3])
-    end
-end
-title('Errors across trials')
-axis([ax], [0 length(stimuli) 0 4]) %set the limits of the axis
-hold off
+conditions = categorical({'kinship holding';'kinship grooming';'kinship observing';'friendship grooming';'friendship sitting close';'friendship foraging';'hierarchy mounting';'hierarchy fighting';'hierarchy chasing'});
+conditions = reordercats(conditions, {'kinship holding';'kinship grooming';'kinship observing';'friendship grooming';'friendship sitting close';'friendship foraging';'hierarchy mounting';'hierarchy fighting';'hierarchy chasing'});
+b = bar(conditions,err_kind_cond, 'FaceColor', 'flat');
+b(1).CData = [0 0.4470 0.7410]; %change the color of the bar depending if it's a test1 phase or a test2 phase
+b(2).CData = [0.4940 0.1840 0.5560];
+yl = yline(2/3, '--', 'chance level', 'LineWidth', 2); %add a horizontal line representing the chance level
+yl.LabelHorizontalAlignment = 'left';
+title('Proportion of errors depending on the condition')
 
 ax1 = nexttile; %next plot
 b = bar(errors); %create barplot for the proportion of the different kinds of error
@@ -101,6 +113,6 @@ yl = yline(2/3, '--', 'chance level', 'LineWidth', 2); %add an horizontal line m
 yl.LabelHorizontalAlignment = 'left';
 
 n = [n,n]; %concatenate the names of the bars twice (because there are 2 test phases)
-axis([ax2], [0 m*2+1 0 1]) %change the limits of the axis
+axis([ax2], [0 7 0 1]) %change the limits of the axis
 set(gca, 'xticklabel', n) %change the names of the bars
 title('Proportion of errors depending on the condition number')

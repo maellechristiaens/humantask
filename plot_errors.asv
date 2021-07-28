@@ -7,19 +7,12 @@ for i=1:length(stimuli)-1 %for all the trials
     end
 end
 change(end+1) = length(stimuli); %add the last trial in the change indexes
-
 m = max(cellfun(@max, stimuli(:,14))); %store the number of conditions seen 
-phases = [20 30 40 50 60 70]; %the number stored in the bhv2 file for each phase of the task
-  
 errors =zeros(1,6); %initialisation of the number of errors of each type
 err_time = zeros(1, length(stimuli)); %initialisation of the errors across trials, 4 possibilities : success (0), no touch during trial (1), wrong touch during learning (2), or wrong touch during test (3)
 err_cond = zeros(1, m*2); %initialisation of the number of errors for each condition (m is the number of cond, *2 because there are 2 test phases)
-nb_cond = zeros(1,m); %initialisation of the number of condition number
 nb_trials = zeros(1,6); %initialisation of the total number of trials per type
-
-for j = 1:2:length(change)-1 %for all the new condition
-    nb_cond(1, stimuli{change(j),14}) = nb_cond(1, stimuli{change(j),14}) + 1; %store the condition number
-end
+phases = [20 30 40 50 60 70]; %the number stored in the bhv2 file for each phase of the task
 
 for i=1:length(stimuli) %for each trial
     nb_trials(find(stimuli{i,9}==phases)) = nb_trials(find(stimuli{i,9}==phases)) + 1; %store which kind of trial it was
@@ -44,12 +37,7 @@ errors(3) = errors(3)/nb_learning;
 errors(4) = errors(4)/nb_trials(3);
 errors(5) = errors(5)/nb_trials(6);
 
-for i=1:length(nb_cond)
-    err_cond(1,i) = err_cond(1,i)/(20*(nb_cond(1,i)/2));
-    err_cond(1,m+ i) = err_cond(1,m + i)/(20*(nb_cond(1,i)/2));
-end
-%divide the total number of errors by the number of each condition number
-
+err_cond = err_cond/(20*(length(change)/4)); %a changer
 
 fig = figure('Position', [20 40 1200 600]); %create the figure box
 t = tiledlayout(2, 2); %create the layout for several plots
@@ -101,6 +89,6 @@ yl = yline(2/3, '--', 'chance level', 'LineWidth', 2); %add an horizontal line m
 yl.LabelHorizontalAlignment = 'left';
 
 n = [n,n]; %concatenate the names of the bars twice (because there are 2 test phases)
-axis([ax2], [0 m*2+1 0 1]) %change the limits of the axis
+axis([ax2], [0 7 0 1]) %change the limits of the axis
 set(gca, 'xticklabel', n) %change the names of the bars
 title('Proportion of errors depending on the condition number')
