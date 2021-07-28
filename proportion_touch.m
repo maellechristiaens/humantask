@@ -42,19 +42,24 @@ if all_trials
     title(t, 'Positions of touches and presentations during all phases of the task')
 else
     title(t, 'Positions of touches and presentations during test phases of the task')
-end
+end 
+%write different title depending on the all_trials parameter
 
 nexttile %next plot
 names = categorical({'top right', 'bottom right', 'bottom left', 'top left','middle'});
 names = reordercats(names, {'top right', 'bottom right', 'bottom left', 'top left','middle'});
-prop = bar(names,positions, 'FaceColor', 'flat');
+%create the names of the different groups of bars, and order them
+
+prop = bar(names,positions, 'FaceColor', 'flat'); %create the bar plot
 prop(1).CData = [0.86 0.5 0.11];
 prop(2).CData = [0.86 0.5 0.11];
 prop(2).FaceAlpha = 0.5;
 prop(3).CData = [0.25 0.3 0.65];
 prop(4).CData = [0.25 0.3 0.65];
 prop(4).FaceAlpha = 0.5;
+%change the color of the bars 
 lgd = legend('Learning touch', 'Learning presentation', 'Test touch', 'Test presentation');
+%add a legend of the different colors
 lgd.Location = 'northeastoutside';
 title('Number of presentations and touches at each position')
 
@@ -63,13 +68,17 @@ for i = 1:5
     positions_normalised(1,i) = positions(1, i)/positions(2,i);
     positions_normalised(2,i) = positions(3, i)/positions(4,i);
 end
+%normalise positions by dividing the touch by the presentation 
 
-nexttile 
+nexttile %next plot
 prop_normalised = bar(names,positions_normalised, 'FaceColor', 'flat');
+%create the bar plot
 prop_normalised(1).CData = [0.86 0.5 0.11];
 prop_normalised(2).CData = [0.25 0.3 0.65];
+%change the colors of the bars
 lgd = legend('Learning', 'Test');
 lgd.Location = 'northeastoutside';
+%add a legend of the different colors 
 title('Proportion of touches compared to presentations at each position')
 
     
