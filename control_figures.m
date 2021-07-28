@@ -13,9 +13,9 @@ stimuli = get_stimuli_presented(name_file, 1); %calculate the cell array with al
 %scripts written
 where_touch = plot_touch(stimuli);
 saveas(where_touch, strcat('plot_touch_', name, '.png'))
-touches_global = proportion_touch_global(stimuli);
+touches_global = proportion_touch(stimuli,1);
 saveas(touches_global, strcat('proportions_of_touch_global_', name, '.png'))
-touches_test = proportion_touch(stimuli);
+touches_test = proportion_touch(stimuli,0);
 saveas(touches_test, strcat('proportions_of_touch_only_test_', name, '.png'))
 reaction_times_global = plot_reaction_time_global(stimuli);
 saveas(reaction_times_global, strcat('reaction_times_global_', name, '.png'))
