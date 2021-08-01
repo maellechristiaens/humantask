@@ -1,5 +1,5 @@
 function[fig] = time_responses(stimuli)
-touched= stimuli(find(~cellfun('isempty', stimuli(:,12))),:);
+data = data(find(cellfun('isempty',strfind(data(:,12), 'Learning'))),:);
 
 react_times = zeros(1, 12);
 phases = [30 40 60 70];

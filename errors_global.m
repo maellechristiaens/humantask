@@ -1,5 +1,8 @@
 function[fig] = errors_global(stimuli)
 
+subjects = unique(stimuli(:,15)); %store the participants' names
+nb_subjects = length(subjects); %store the number of participants
+
 change=[]; %to store the index where it changes from learning to test phase
 for i=1:length(stimuli)-1 %for all the trials
     if ~isequal(stimuli{i,12}, stimuli{i+1,12}) %in 12th column, there is written 'Test1', 'Test2' or nothing
@@ -53,21 +56,21 @@ end
 
 errors(1) = []; %erase the success trials
 nb_learning = nb_trials(1) + nb_trials(2) + nb_trials(4) + nb_trials(5); %the learning phase numbers are 20, 30, 50, 60, so the total number of learning trials is the sum of the numbers of these 4 phases
-errors(1) = errors(1)/sum(nb_trials); %transform from absolute numbers of errors to proportions by dividing by the total number of each phase
-errors(2) = errors(2)/sum(nb_trials);
-errors(3) = errors(3)/nb_learning;
-errors(4) = errors(4)/nb_trials(3);
-errors(5) = errors(5)/nb_trials(6);
+errors(1) = (sum(nb_trials)-errors(1))/sum(nb_trials); %transform from absolute numbers of errors to proportions of success by dividing by the total number of each phase
+errors(2) = (sum(nb_trials)-errors(2))/sum(nb_trials);
+errors(3) = (nb_learning-errors(3))/nb_learning;
+errors(4) = (nb_trials(3)-errors(4))/nb_trials(3);
+errors(5) = (nb_trials(6)-errors(5))/nb_trials(6);
 
 for i=1:length(nb_cond)
-    err_cond(1,i) = err_cond(1,i)/(20*(nb_cond(1,i)/2));
-    err_cond(1,m+ i) = err_cond(1,m + i)/(20*(nb_cond(1,i)/2));
+    err_cond(1,i) = (20*(nb_cond(1,i)/2)-err_cond(1,i))/(20*(nb_cond(1,i)/2));
+    err_cond(1,m+ i) = (20*(nb_cond(1,i)/2)-err_cond(1,m + i))/(20*(nb_cond(1,i)/2));
 end
 %divide the total number of errors by the number of each condition number
 
 for i=1:length(nb_kind_cond)
-    err_kind_cond(1,i) = err_kind_cond(1,i)/(20*nb_kind_cond(1,i));
-    err_kind_cond(2,i) = err_kind_cond(2,i)/(20*nb_kind_cond(1,i));
+    err_kind_cond(1,i) = (20*nb_kind_cond(1,i)-err_kind_cond(1,i))/(20*nb_kind_cond(1,i));
+    err_kind_cond(2,i) = (20*nb_kind_cond(1,i)-err_kind_cond(2,i))/(20*nb_kind_cond(1,i));
 end
 %divide the total number of errors by the number of each condition kind
 
@@ -79,9 +82,9 @@ conditions = reordercats(conditions, {'kinship holding';'kinship grooming';'kins
 b = bar(conditions,err_kind_cond, 'FaceColor', 'flat');
 b(1).CData = [0 0.4470 0.7410]; %change the color of the bar depending if it's a test1 phase or a test2 phase
 b(2).CData = [0.4940 0.1840 0.5560];
-yl = yline(2/3, '--', 'chance level', 'LineWidth', 2); %add a horizontal line representing the chance level
+yl = yline(1/3, '--', 'chance level', 'LineWidth', 2); %add a horizontal line representing the chance level
 yl.LabelHorizontalAlignment = 'left';
-title('Proportion of errors depending on the condition')
+title('Proportion of success depending on the condition')
 
 ax1 = nexttile; %next plot
 b = bar(errors); %create barplot for the proportion of the different kinds of error
@@ -91,15 +94,15 @@ b.CData(2,:) = [0.5 0.5 0.5];
 b.CData(3,:) = [0.9290 0.6940 0.1250];
 b.CData(4,:) = [0 0.4470 0.7410];
 b.CData(5,:) = [0.4940 0.1840 0.5560];
-yl = yline(2/3, '--', 'chance level', 'LineWidth', 2); %add a horizontal line representing the chance level
+yl = yline(1/3, '--', 'chance level', 'LineWidth', 2); %add a horizontal line representing the chance level
 yl.LabelHorizontalAlignment = 'left';
 
-names = {'No touch in fixation'; 'No touch during trial'; 'Wrong touch during learning'; 'Wrong touch during test1'; 'Wrong touch during test2'};
+names = {'Touch in fixation'; 'Touch during trial'; 'Right touch during learning'; 'Right touch during test1'; 'Right touch during test2'};
 %names of the different bars in the barplot
 
-axis([ax1], [0 6 0 1]) %set the limits of the axis
+axis([ax1], [0 6 0 1.2]) %set the limits of the axis
 set(gca, 'xticklabel', names) %change the names of the bars
-title('Proportion of errors in each phase')
+title('Proportion of success in each phase')
 
 ax2 = nexttile; %next plot
 b2 = bar(err_cond);
@@ -110,10 +113,10 @@ for i = 1:m %for each condition
     b2.CData(m + i,:) = [0.4940 0.1840 0.5560];
     n{end + 1} = strcat('Condition ', num2str(i)); %add the condition number to the names of the bars
 end
-yl = yline(2/3, '--', 'chance level', 'LineWidth', 2); %add an horizontal line marking the chance level
+yl = yline(1/3, '--', 'chance level', 'LineWidth', 2); %add an horizontal line marking the chance level
 yl.LabelHorizontalAlignment = 'left';
 
 n = [n,n]; %concatenate the names of the bars twice (because there are 2 test phases)
 axis([ax2], [0 7 0 1]) %change the limits of the axis
 set(gca, 'xticklabel', n) %change the names of the bars
-title('Proportion of errors depending on the condition number')
+title('Proportion of success depending on the condition number')
