@@ -17,9 +17,9 @@ touches_global = proportion_touch(stimuli,1);
 saveas(touches_global, strcat('proportions_of_touch_global_', name, '.png'))
 touches_test = proportion_touch(stimuli,0);
 saveas(touches_test, strcat('proportions_of_touch_only_test_', name, '.png'))
-reaction_times_global = plot_reaction_time_global(stimuli);
+reaction_times_global = plot_reaction_time(stimuli,1);
 saveas(reaction_times_global, strcat('reaction_times_global_', name, '.png'))
-reaction_times_test = plot_reaction_time(stimuli);
+reaction_times_test = plot_reaction_time(stimuli,0);
 saveas(reaction_times_test, strcat('reaction_times_only_test_', name, '.png'))
 times_errors = comparison_errors(stimuli);
 saveas(times_errors, strcat('comparison_reaction_times_error_non_error_', name, '.png'))
