@@ -73,7 +73,6 @@ im_incor2.List = {char(list_distractor2(distractor2).name), pos(m(3),:), 1.1};
 % present this picture in another random position from the 5 possible
 cd ../.. %go back to the main folder of the task
 
-
 max_reaction_time = 7000;
 
 % create scenes: fixation and presentation of another image of the choosen 

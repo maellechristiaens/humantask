@@ -29,7 +29,6 @@ if isempty(timing_filenames_retrieved) %Only if it is the first time the functio
     size_im = size(list_images,1);
     TrialRecord.User.pictures_left4 = linspace(1, size_im, size_im);
     TrialRecord.User.pictures_left5 = linspace(1, size_im, size_im);
-    %bhv_variable(strcat('condition_',num2str(TrialRecord.User.condition), '_generalisation1'), TrialRecord.User.pictures_left4);
     cd ../..
     
     
@@ -38,7 +37,6 @@ if isempty(timing_filenames_retrieved) %Only if it is the first time the functio
     list_images = dir('*.bmp*');
     size_im = size(list_images,1);
     TrialRecord.User.pictures_left7 = linspace(1, size_im, size_im);
-    %bhv_variable(strcat('condition_',num2str(TrialRecord.User.condition), '_generalisation2'), TrialRecord.User.pictures_left7);
     cd ../..
     
     for i = 1:3
@@ -144,9 +142,9 @@ switch TrialRecord.User.step %switch to the different steps according to the num
             end
             
         else
-            proba = rand; %test step: on 20 pourcents of the trials, it is a test, the other 80 pourcents are learning trials
-            if proba > 0.5 %pick a random number and see if it is above 0.8 or not (simulation of probabilities) 
-                timingfile = 'step4_human.m'; %if it is above 0.8, test trial
+            proba = rand; %test step: on 50 pourcents of the trials, it is a test, the other 50 pourcents are learning trials
+            if proba > 0.5 %pick a random number and see if it is above 0.5 or not (simulation of probabilities) 
+                timingfile = 'step4_human.m'; %if it is above 0.5, test trial
             else
                 timingfile = 'step3_human.m';
             end
@@ -205,7 +203,6 @@ switch TrialRecord.User.step %switch to the different steps according to the num
                 list_images = dir('*.bmp*');
                 size_im = size(list_images,1);
                 TrialRecord.User.pictures_left7 = linspace(1, size_im, size_im);
-                %bhv_variable(strcat('condition_',num2str(TrialRecord.User.condition), '_generalisation2'), TrialRecord.User.pictures_left7);
                 cd ../..
                 
                 for i = 1:3
